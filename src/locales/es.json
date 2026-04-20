@@ -1,0 +1,57 @@
+{
+  "tabs": {
+    "hoy": "HOY",
+    "miPlan": "MI PLAN",
+    "combustible": "COMBUSTIBLE",
+    "cockpit": "COCKPIT"
+  },
+  "hoy": {
+    "title": "Dashboard HOY",
+    "semaphore_ready": "Listo para Entrenar",
+    "semaphore_moderate": "Fatiga Moderada",
+    "semaphore_rest": "Recuperación Total",
+    "activity": "15k Trail Run Z3",
+    "sync": "Sincronizado · Garmin",
+    "brainMsg": "Mensaje del Cerebro",
+    "brainInsight": "Tu carga semanal está en el 78% de tu capacidad máxima. Hoy, prioriza los 15k a ritmo Z3. Mañana: descanso activo. Tu HRV está en línea ascendente — buen signo para el hito."
+  },
+  "cockpit": {
+    "title": "COCKPIT",
+    "subtitle": "Centro de Mando del Atleta",
+    "profile": "Perfil del Atleta",
+    "biometrics": "Biometría",
+    "gear": "Arsenal de Equipo",
+    "syncCenter": "Centro de Conexiones",
+    "connected": "Conectado",
+    "syncing": "Sincronizando...",
+    "disconnected": "Sin Conexión",
+    "btn_connect": "Conectar",
+    "btn_disconnect": "Desconectar",
+    "sync_msg": "Última Sincronización:",
+    "language": "Idioma de la App (Español)",
+    "settings": "Configuración",
+    "privacy": "Privacidad Total",
+    "privacyDesc": "Tus datos de salud son exclusivamente tuyos.",
+    "automation": "Automatización del Plan",
+    "automationDesc": "El Cerebro ajusta tu plan sin intervención manual.",
+    "notifications": "Alertas de Recuperación",
+    "notificationsDesc": "Avisos inteligentes según tu Body Battery.",
+    "reset": "Reiniciar Onboarding",
+    "version": "CoreAdapt V. 1.2 · Powered by Antigravity"
+  },
+  "landing": {
+    "header": "EL OBSERVATORIO CINÉTICO",
+    "title": "DISEÑADO PARA LOS IMPARABLES.",
+    "subtitle": "El ecosistema de alto rendimiento para el atleta ejecutivo. Precisión, no distracción.",
+    "label_name": "Nombre Completo",
+    "label_email": "Correo Electrónico",
+    "label_phone": "WhatsApp / Contacto",
+    "placeholder_name": "Nombre del Atleta",
+    "button": "RECLAMAR 7 DÍAS DE ACCESO GRATUITO",
+    "footer": "Conexión segura con Garmin y Strava después del acceso. Potenciado por Inteligencia CoreAdapt.",
+    "tab_login": "INGRESO",
+    "tab_register": "NUEVO ATLETA",
+    "label_password": "CONTRASEÑA",
+    "btn_login": "INICIAR SESIÓN"
+  }
+}

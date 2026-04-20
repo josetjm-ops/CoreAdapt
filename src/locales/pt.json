@@ -1,0 +1,54 @@
+{
+  "tabs": {
+    "hoy": "HOJE",
+    "miPlan": "MEU PLANO",
+    "combustible": "COMBUSTÍVEL",
+    "cockpit": "COCKPIT"
+  },
+  "hoy": {
+    "title": "Dashboard HOJE",
+    "semaphore_ready": "Pronto para Treinar",
+    "semaphore_moderate": "Fadiga Moderada",
+    "semaphore_rest": "Recuperação Total",
+    "activity": "15k Trail Run Z3",
+    "sync": "Sincronizado · Garmin",
+    "brainMsg": "Mensagem do Cérebro",
+    "brainInsight": "Sua carga semanal está em 78% da capacidade máxima. Hoje, priorize os 15k no ritmo Z3. Amanhã: descanso activo. Sua HRV está em tendência ascendente — ótimo sinal para a meta."
+  },
+  "cockpit": {
+    "title": "COCKPIT",
+    "subtitle": "Central de Comando do Atleta",
+    "profile": "Perfil do Atleta",
+    "biometrics": "Biometria",
+    "gear": "Arsenal de Equipamentos",
+    "syncCenter": "Central de Conexões",
+    "connected": "Conectado",
+    "syncing": "Sincronizando...",
+    "disconnected": "Desconectado",
+    "language": "Idioma do App",
+    "settings": "Configurações",
+    "privacy": "Privacidade Total",
+    "privacyDesc": "Seus dados de saúde pertencem exclusivamente a você.",
+    "automation": "Automação do Plano",
+    "automationDesc": "O Cérebro ajusta seu plano sem intervenção manual.",
+    "notifications": "Alertas de Recuperação",
+    "notificationsDesc": "Avisos inteligentes com base na sua Body Battery.",
+    "reset": "Reiniciar Onboarding",
+    "version": "CoreAdapt V. 1.2 · Powered by Antigravity"
+  },
+  "landing": {
+    "header": "O OBSERVATÓRIO CINÉTICO",
+    "title": "PROJETADO PARA OS IMPARÁVEIS.",
+    "subtitle": "O ecossistema de alto desempenho para o atleta executivo. Precisão, não distração.",
+    "label_name": "Nome Completo",
+    "label_email": "E-mail",
+    "label_phone": "WhatsApp / Contato",
+    "placeholder_name": "Nome do Atleta",
+    "button": "REIVINDICAR 7 DIAS DE ACESSO GRATUITO",
+    "footer": "Conexão segura com Garmin e Strava após o acesso. Distribuído pela Inteligência CoreAdapt.",
+    "tab_login": "ENTRAR",
+    "tab_register": "NOVO ATLETA",
+    "label_password": "SENHA",
+    "btn_login": "INICIAR SESSÃO"
+  }
+}

@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Core Colors - Restricted to Stitch v1.2 Palette */
+  --bg-color: #131313;
+  --surface-low: #1c1b1b;
+  --surface-high: #2a2a2a;
+  --surface-highest: #353534;
+  --surface-lowest: #0e0e0e;
+  
+  --primary: #00FF41;         /* Go / Optimal */
+  --primary-glow: #00e639;
+  --secondary: #2E5BFF;       /* Sync / Flow */
+  --tertiary: #FFBF00;        /* Warning / Alert */
+  
+  --on-surface: #e5e2e1;
+  --on-surface-variant: #b9ccb2;
+  --on-primary: #003907;
+  
+  /* Precision Layout */
+  --spacing-8: 2rem;
+  --spacing-16: 4rem;
+  --radius-lg: 2rem;          /* 32px - As per Stitch "High" */
+  --radius-full: 9999px;
+  
+  /* Kinetic Shadows (Ambient Glow) */
+  --ambient-glow: 0 0 40px -10px rgba(0, 230, 57, 0.08);
+  --glass-bg: rgba(53, 53, 52, 0.4);
+  --glass-blur: blur(20px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Editorial Typography (The Kinetic Observatory) */
+.display-lg {
+  font-size: 3.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.headline-md {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.title-lg {
+  font-size: 1.375rem;
+  font-weight: 500;
+}
+
+.label-md {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--on-surface-variant);
+}
+
+/* Kinetic Components */
+.card-technical {
+  background-color: var(--surface-low);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: none; /* No-Line Rule */
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top-down subtle edge highlight (as per Stitch 5.1) */
+.card-technical::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 100%);
+}
+
+.glow-primary {
+  box-shadow: var(--ambient-glow);
+}
+
+.glass-nav {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: var(--radius-full);
+}
+
+.btn-lithium {
+  background: linear-gradient(180deg, #ebffe2 0%, #00ff41 100%);
+  color: var(--on-primary);
+  font-weight: 800;
+  border-radius: var(--radius-full);
+  padding: 1rem 2rem;
+  transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.btn-lithium:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
+
+/* Utilities */
+.forward-motion {
+  margin-left: 2rem; /* Intentional Asymmetry */
+}
+
+.no-line {
+  border: none !important;
+}

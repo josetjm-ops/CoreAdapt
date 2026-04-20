@@ -1,0 +1,54 @@
+{
+  "tabs": {
+    "hoy": "AUJOURD'HUI",
+    "miPlan": "MON PLAN",
+    "combustible": "CARBURANT",
+    "cockpit": "COCKPIT"
+  },
+  "hoy": {
+    "title": "Dashboard AUJOURD'HUI",
+    "semaphore_ready": "Prêt à s'Entraîner",
+    "semaphore_moderate": "Fatigue Modérée",
+    "semaphore_rest": "Récupération Totale",
+    "activity": "15k Trail Run Z3",
+    "sync": "Synchronisé · Garmin",
+    "brainMsg": "Message du Cerveau",
+    "brainInsight": "Votre charge hebdomadaire est à 78% de votre capacité maximale. Aujourd'hui, donnez la priorité aux 15km au rythme Z3. Demain: repos actif. Votre tendance HRV est en hausse — bon signe pour l'objectif."
+  },
+  "cockpit": {
+    "title": "COCKPIT",
+    "subtitle": "Centre de Commandement de l'Athlète",
+    "profile": "Profil de l'Athlète",
+    "biometrics": "Biométrie",
+    "gear": "Arsenal d'Équipement",
+    "syncCenter": "Centre de Connexions",
+    "connected": "Connecté",
+    "syncing": "Synchronisation...",
+    "disconnected": "Déconnecté",
+    "language": "Langue de l'App (Français)",
+    "settings": "Paramètres",
+    "privacy": "Confidentialité Totale",
+    "privacyDesc": "Vos données de santé vous appartiennent exclusivement.",
+    "automation": "Automatisation du Plan",
+    "automationDesc": "Le Cerveau ajuste votre plan sans intervention manuelle.",
+    "notifications": "Alertes de Récupération",
+    "notificationsDesc": "Alertes intelligentes basées sur votre Body Battery.",
+    "reset": "Réinitialiser l'Onboarding",
+    "version": "CoreAdapt V. 1.2 · Powered by Antigravity"
+  },
+  "landing": {
+    "header": "L'OBSERVATOIRE CINÉTIQUE",
+    "title": "CONÇU POUR LES INARRÊTABLES.",
+    "subtitle": "L'écosystème haute performance pour l'athlète exécutif. Précision, pas distraction.",
+    "label_name": "Nom Complet",
+    "label_email": "Adresse E-mail",
+    "label_phone": "WhatsApp / Contact",
+    "placeholder_name": "Nom de l'Athlète",
+    "button": "RÉCLAMER 7 JOURS D'ACCÈS GRATUIT",
+    "footer": "Connexion sécurisée à Garmin et Strava après l'accès. Propulsé par l'Intelligence CoreAdapt.",
+    "tab_login": "CONNEXION",
+    "tab_register": "NOUVEL ATHLÈTE",
+    "label_password": "MOT DE PASSE",
+    "btn_login": "SE CONNECTER"
+  }
+}

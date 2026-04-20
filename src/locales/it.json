@@ -1,0 +1,54 @@
+{
+  "tabs": {
+    "hoy": "OGGI",
+    "miPlan": "IL MIO PIANO",
+    "combustible": "CARBURANTE",
+    "cockpit": "COCKPIT"
+  },
+  "hoy": {
+    "title": "Dashboard OGGI",
+    "semaphore_ready": "Pronto per l'Allenamento",
+    "semaphore_moderate": "Fatica Moderata",
+    "semaphore_rest": "Recupero Totale",
+    "activity": "15k Trail Run Z3",
+    "sync": "Sincronizzato · Garmin",
+    "brainMsg": "Messaggio del Cervello",
+    "brainInsight": "Il tuo carico settimanale è al 78% della capacità massima. Oggi, dai priorità ai 15k a ritmo Z3. Domani: riposo attivo. Il tuo trend HRV è in ascesa — un buon segno per l'obiettivo."
+  },
+  "cockpit": {
+    "title": "COCKPIT",
+    "subtitle": "Centro di Comando dell'Atleta",
+    "profile": "Profilo Atleta",
+    "biometrics": "Biometria",
+    "gear": "Arsenale Attrezzatura",
+    "syncCenter": "Centro Connessioni",
+    "connected": "Connesso",
+    "syncing": "Sincronizzazione...",
+    "disconnected": "Disconnesso",
+    "language": "Lingua dell'App (Italiano)",
+    "settings": "Impostazioni",
+    "privacy": "Privacy Totale",
+    "privacyDesc": "I tuoi dati sanitari ti appartengono esclusivamente.",
+    "automation": "Automazione del Piano",
+    "automationDesc": "Il Cervello regola il tuo piano senza intervento manual.",
+    "notifications": "Avvisi di Recupero",
+    "notificationsDesc": "Avvisi intelligenti basati sulla tua Body Battery.",
+    "reset": "Ripristina Onboarding",
+    "version": "CoreAdapt V. 1.2 · Powered by Antigravity"
+  },
+  "landing": {
+    "header": "L'OSSERVATORIO CINETICO",
+    "title": "PROGETTATO PER GLI INARRESTABILI.",
+    "subtitle": "L'ecosistema ad alte prestazioni per l'atleta esecutivo. Precisione, non distrazione.",
+    "label_name": "Nome Completo",
+    "label_email": "Indirizzo E-mail",
+    "label_phone": "WhatsApp / Contatto",
+    "placeholder_name": "Nome dell'Atleta",
+    "button": "RICHIEDI 7 GIORNI DI ACCESSO GRATUITO",
+    "footer": "Connessione sicura a Garmin e Strava dopo l'accesso. Alimentato dall'Intelligenza CoreAdapt.",
+    "tab_login": "ACCEDI",
+    "tab_register": "NUOVO ATLETA",
+    "label_password": "PASSWORD",
+    "btn_login": "ACCEDI"
+  }
+}

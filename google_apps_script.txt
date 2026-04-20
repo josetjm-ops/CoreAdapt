@@ -1,0 +1,100 @@
+// CÓDIGO PARA PEGAR EN GOOGLE APPS SCRIPT
+// 1. Ve a tu Google Sheets (ID: 1QdQbtpmXQJotBFTStCzc9DT2PxirWRHGLh2vt7JoJG4)
+// 2. Clic en "Extensiones" > "Apps Script"
+// 3. Pega todo este código borrando lo anterior.
+// 4. Guarda y dale clic a "Implementar" (Deploy) > "Nueva Implementación".
+// 5. Tipo: "Aplicación web". Ejecutar como: "Tú". Quién tiene acceso: "Cualquiera" (Anyone).
+// 6. Autoriza los permisos que te pida Google.
+// 7. Copia la URL que te genere y provéemela para actualizar nuestra App.
+
+const SHEET_NAME = 'Hoja 1'; // Cambia esto si tu hoja de datos principal se llama distinto
+
+function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
+
+    // Preparar encabezados en la primera corrida si está vacío
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        "Fecha_Registro", 
+        "Email", 
+        "Nombre", 
+        "Telefono", 
+        "Estatus_Suscripcion", 
+        "Fin_Prueba", 
+        "Avatar", 
+        "Meta_Hito", 
+        "App_Sync"
+      ]);
+      // Estilos del encabezado
+      sheet.getRange(1, 1, 1, 9).setFontWeight("bold").setBackground("#e0e0e0");
+    }
+
+    // Buscamos si el usuario (Email) ya existe para actualizar, si no, crear
+    const dataRange = sheet.getDataRange();
+    const values = dataRange.getValues();
+    let rowIndex = -1;
+    
+    // Asumimos que el Email está en la columna B (índice 1)
+    for (let i = 1; i < values.length; i++) {
+      if (values[i][1] === data.email) {
+        rowIndex = i + 1; // +1 porque setValues en sheets es base 1
+        break;
+      }
+    }
+
+    if (data.action === 'signup') {
+      if (rowIndex === -1) {
+        // Nuevo registro!
+        sheet.appendRow([
+          data.registrationDate,
+          data.email,
+          data.name,
+          data.phone,
+          data.status || 'Iniciado',
+          data.trialEndsAt,
+          '', // Avatar
+          '', // Meta_Hito
+          ''  // App_Sync
+        ]);
+      }
+    } else if (data.action === 'onboardComplete') {
+      if (rowIndex !== -1) {
+        // Actualizamos datos existentes (solo la parte de onboarding)
+        // Columna 5: Estatus (E), 7: Avatar (G), 8: Meta (H), 9: AppS_Sync (I)
+        sheet.getRange(rowIndex, 5).setValue(data.status || 'Completado');
+        sheet.getRange(rowIndex, 7).setValue(data.avatar || '');
+        sheet.getRange(rowIndex, 8).setValue(data.milestone || '');
+        sheet.getRange(rowIndex, 9).setValue(data.preferredSync || '');
+      } else {
+        // No encontró la fila... lo creamos por seguridad.
+        sheet.appendRow([
+          new Date().toISOString(),
+          data.email,
+          data.name || 'Desconocido (Solo Onboard)',
+          '', // phone
+          'Completado',
+          '', // trialEndsAt
+          data.avatar,
+          data.milestone,
+          data.preferredSync
+        ]);
+      }
+    }
+
+    return ContentService.createTextOutput(JSON.stringify({ "status": "success" }))
+                         .setMimeType(ContentService.MimeType.JSON);
+
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ "status": "error", "message": error.message }))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+// Necesario para permitir las peticiones CORS desde el frontend (React)
+function doOptions(e) {
+  const response = ContentService.createTextOutput(JSON.stringify({"status": "ok"}));
+  response.setMimeType(ContentService.MimeType.JSON);
+  return response;
+}

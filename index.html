@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- ── Favicon ── -->
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+
+    <!-- ── Viewport — Locked for mobile app feel ── -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>CoreAdapt - AI Personal Trainer & Trail Running Coach</title>
+    <meta name="description" content="El primer ecosistema de entrenamiento que ajusta tu plan en tiempo real basado en tu HRV de Garmin y 7 especialistas de IA." />
+
+    <!-- ── Theme Color (Android Chrome toolbar) ── -->
+    <meta name="theme-color" content="#131313" />
+
+    <!-- ── PWA Manifest ── -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- ── Apple iOS PWA Support ── -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CoreAdapt" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
+
+    <!-- ── Microsoft Tile (optional but good practice) ── -->
+    <meta name="msapplication-TileColor" content="#131313" />
+    <meta name="msapplication-TileImage" content="/icon-192.png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then(reg => {
+            console.log('Service Worker registrado.', reg);
+          }).catch(err => {
+            console.log('Fallo en el registro del SW.', err);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

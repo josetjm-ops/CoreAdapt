@@ -1,0 +1,30 @@
+{
+  "name": "antigravity-coreadapt",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "firebase": "^12.11.0",
+    "firebase-admin": "^13.7.0",
+    "i18next": "^26.0.1",
+    "lucide-react": "^1.8.0",
+    "openai": "^6.33.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-i18next": "^17.0.1",
+    "react-router-dom": "^7.13.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.0.1",
+    "vite": "^8.0.3",
+    "vite-plugin-pwa": "^1.2.0"
+  }
+}

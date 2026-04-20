@@ -1,0 +1,57 @@
+{
+  "tabs": {
+    "hoy": "TODAY",
+    "miPlan": "MY PLAN",
+    "combustible": "FUEL",
+    "cockpit": "COCKPIT"
+  },
+  "hoy": {
+    "title": "TODAY Dashboard",
+    "semaphore_ready": "Ready to Train",
+    "semaphore_moderate": "Moderate Fatigue",
+    "semaphore_rest": "Full Recovery",
+    "activity": "15k Trail Run Z3",
+    "sync": "Synced · Garmin",
+    "brainMsg": "Brain Message",
+    "brainInsight": "Your weekly load is at 78% of max capacity. Today, prioritize the 15k at Z3 pace. Tomorrow: active rest. Your HRV trend is ascending — a good sign for the milestone."
+  },
+  "cockpit": {
+    "title": "COCKPIT",
+    "subtitle": "Athlete Command Center",
+    "profile": "Athlete Profile",
+    "biometrics": "Biometrics",
+    "gear": "Gear Arsenal",
+    "syncCenter": "Connection Center",
+    "connected": "Connected",
+    "syncing": "Syncing...",
+    "disconnected": "No Connection",
+    "btn_connect": "Connect",
+    "btn_disconnect": "Disconnect",
+    "sync_msg": "Last Sync:",
+    "language": "App Language",
+    "settings": "Settings",
+    "privacy": "Full Privacy",
+    "privacyDesc": "Your health data belongs exclusively to you.",
+    "automation": "Plan Automation",
+    "automationDesc": "The Brain adjusts your plan without manual intervention.",
+    "notifications": "Recovery Alerts",
+    "notificationsDesc": "Smart alerts based on your Body Battery.",
+    "reset": "Reset Onboarding",
+    "version": "CoreAdapt V. 1.2 · Powered by Antigravity"
+  },
+  "landing": {
+    "header": "THE KINETIC OBSERVATORY",
+    "title": "ENGINEERED FOR THE UNSTOPPABLE.",
+    "subtitle": "The high-performance ecosystem for the executive athlete. Precision, not distraction.",
+    "label_name": "Full Name",
+    "label_email": "Email Address",
+    "label_phone": "WhatsApp / Contact",
+    "placeholder_name": "Athlete Name",
+    "button": "CLAIM 7-DAY FREE ACCESS",
+    "footer": "Secure connection to Garmin and Strava after access. Powered by CoreAdapt Intelligence.",
+    "tab_login": "LOG IN",
+    "tab_register": "NEW ATHLETE",
+    "label_password": "PASSWORD",
+    "btn_login": "SIGN IN"
+  }
+}
