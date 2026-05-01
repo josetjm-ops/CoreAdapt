@@ -1,35 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
 import { connectionService } from '../services/ConnectionService';
 
 const Callback = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState('processing'); // processing | success | error
+  const [status, setStatus] = useState('processing');
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const state = searchParams.get('state'); // Service target (e.g., garmin, strava)
-    
-    if (code) {
-      console.log(`Received OAuth code: ${code}. Service: ${state}`);
-      
-      const targetService = state || 'strava'; 
-      
-      connectionService.connect(targetService, code)
-        .then(() => {
-          setStatus('success');
-          setTimeout(() => navigate('/'), 2000);
-        })
-        .catch(err => {
-          console.error("Connection failed:", err);
-          setStatus('error');
-          setTimeout(() => navigate('/'), 3000);
-        });
-    } else {
+    const state = searchParams.get('state');
+
+    if (!code) {
       setStatus('error');
       setTimeout(() => navigate('/'), 3000);
+      return;
     }
+
+    const targetService = state || 'strava';
+
+    const handleCallback = async () => {
+      try {
+        // Obtener Firebase ID token para que el serverless verifique la identidad
+        const user = auth.currentUser;
+        const idToken = user ? await user.getIdToken() : null;
+
+        await connectionService.connect(targetService, code, idToken);
+        setStatus('success');
+        setTimeout(() => navigate('/'), 2000);
+      } catch (err) {
+        console.error("Connection failed:", err);
+        setStatus('error');
+        setTimeout(() => navigate('/'), 3000);
+      }
+    };
+
+    handleCallback();
   }, [searchParams, navigate]);
 
   return (
@@ -44,14 +51,14 @@ const Callback = () => {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         marginBottom: '1.5rem', position: 'relative'
       }}>
-         {status === 'processing' && (
-           <div className="spinner" style={{
-             width: '40px', height: '40px', border: '3px solid rgba(0,255,65,0.2)',
-             borderTopColor: '#00FF41', borderRadius: '50%', animation: 'spin 1s linear infinite'
-           }} />
-         )}
-         {status === 'success' && <span style={{ fontSize: '2.5rem', color: '#00FF41' }}>✓</span>}
-         {status === 'error' && <span style={{ fontSize: '2.5rem', color: '#FF4444' }}>!</span>}
+        {status === 'processing' && (
+          <div className="spinner" style={{
+            width: '40px', height: '40px', border: '3px solid rgba(0,255,65,0.2)',
+            borderTopColor: '#00FF41', borderRadius: '50%', animation: 'spin 1s linear infinite'
+          }} />
+        )}
+        {status === 'success' && <span style={{ fontSize: '2.5rem', color: '#00FF41' }}>✓</span>}
+        {status === 'error' && <span style={{ fontSize: '2.5rem', color: '#FF4444' }}>!</span>}
       </div>
 
       <h2 style={{ fontSize: '1.5rem', fontWeight: '800' }}>
@@ -59,16 +66,14 @@ const Callback = () => {
         {status === 'success' && '¡Conexión Exitosa!'}
         {status === 'error' && 'Error en la Autenticación'}
       </h2>
-      
+
       <p style={{ color: '#b9ccb2', marginTop: '1rem', fontSize: '0.9rem' }}>
         {status === 'processing' && 'Estamos vinculando tus datos de entrenamiento de forma segura.'}
         {status === 'success' && 'Redirigiendo a tu Cockpit de alto desempeño...'}
         {status === 'error' && 'No recibimos el permiso necesario. Inténtalo de nuevo.'}
       </p>
 
-      <style>{`
-        @keyframes spin { to { transform: rotate(360deg); } }
-      `}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };

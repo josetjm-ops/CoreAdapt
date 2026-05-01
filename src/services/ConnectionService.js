@@ -1,6 +1,7 @@
 /**
  * ConnectionService.js
- * Manages the state of third-party integrations (Garmin, Strava, etc.)
+ * Gestiona el estado de UI de integraciones (Garmin, Strava, etc.)
+ * Los tokens de Strava se almacenan en Firestore vía serverless — nunca en localStorage.
  */
 
 class ConnectionService {
@@ -19,10 +20,17 @@ class ConnectionService {
       alpha_intelligence: { connected: true, lastSync: new Date().toISOString(), data: {} }
     };
 
-    // MIGRACIÓN FORZADA (Lógica ALPHA): Eliminar NotebookLM si existe en caché antiguo
+    // Migración ALPHA: eliminar NotebookLM si existe en caché antiguo
     if (connections.notebooklm) {
       delete connections.notebooklm;
       connections.alpha_intelligence = { connected: true, lastSync: new Date().toISOString(), data: {} };
+      localStorage.setItem(this.storageKey, JSON.stringify(connections));
+    }
+
+    // Migración de seguridad: eliminar tokens que hayan quedado en localStorage
+    if (connections.strava?.accessToken || connections.strava?.refreshToken) {
+      const { accessToken, refreshToken, expiresAt, ...safeState } = connections.strava;
+      connections.strava = safeState;
       localStorage.setItem(this.storageKey, JSON.stringify(connections));
     }
 
@@ -41,35 +49,33 @@ class ConnectionService {
   }
 
   getCorosAuthUrl() {
-    // Placeholder - COROS API usually requires a client_id and secret
-    return "#"; 
+    return "#";
   }
 
-  async exchangeStravaCode(code) {
+  async exchangeStravaCode(code, idToken) {
+    if (!idToken) throw new Error('Firebase ID token required to connect Strava');
+
     try {
       const response = await fetch('/api/strava-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code })
+        body: JSON.stringify({ code, idToken })
       });
 
       if (!response.ok) throw new Error('Failed to exchange Strava code');
 
       const data = await response.json();
-      
+
+      // Solo guardamos estado de UI — los tokens están en Firestore
       this.connections['strava'] = {
         connected: true,
         lastSync: new Date().toISOString(),
-        accessToken: data.access_token,
-        refreshToken: data.refresh_token,
-        expiresAt: data.expires_at,
-        athlete: data.athlete,
-        data: { 
-          userName: `${data.athlete.firstname} ${data.athlete.lastname}`,
-          profilePic: data.athlete.profile
+        data: {
+          userName: data.athlete ? `${data.athlete.firstname} ${data.athlete.lastname}` : 'Atleta',
+          profilePic: data.athlete?.profile || null
         }
       };
-      
+
       this.saveConnections();
       return this.connections['strava'];
     } catch (error) {
@@ -78,13 +84,12 @@ class ConnectionService {
     }
   }
 
-  async connect(serviceId, code = null) {
+  async connect(serviceId, code = null, idToken = null) {
     if (serviceId === 'strava' && code) {
-      return await this.exchangeStravaCode(code);
+      return await this.exchangeStravaCode(code, idToken);
     }
-    
-    // Fallback or generic connection (simulated)
-    console.log(`Generic connection for: ${serviceId}`);
+
+    // Conexión genérica simulada para otros servicios
     return new Promise((resolve) => {
       setTimeout(() => {
         this.connections[serviceId] = {

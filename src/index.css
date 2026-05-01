@@ -16,6 +16,7 @@
   --on-surface: #e5e2e1;
   --on-surface-variant: #b9ccb2;
   --on-primary: #003907;
+  --amber: #FFBF00;
   
   /* Precision Layout */
   --spacing-8: 2rem;
@@ -97,6 +98,12 @@ body {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-full);
+}
+
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
 }
 
 .btn-lithium {

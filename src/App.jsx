@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { auth } from './firebaseConfig';
+import { auth, db } from './firebaseConfig';
 import { onAuthStateChanged, reload } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 import MarketingPage from './views/MarketingPage';
 import Login from './views/Login';
 import Signup from './views/Signup';
@@ -23,7 +24,7 @@ function MainLayout({ profile, setProfile }) {
     switch (activeTab) {
       case 'hoy':         return <DashboardHoy profile={profile} />;
       case 'miPlan':      return <MiPlan profile={profile} />;
-      case 'combustible': return <Combustible />;
+      case 'combustible': return <Combustible profile={profile} />;
       case 'cockpit':     return <Cockpit profile={profile} setProfile={setProfile} />;
       default:            return <DashboardHoy profile={profile} />;
     }
@@ -59,8 +60,6 @@ function App() {
         
         // RECUPERACIÓN AUTOMÁTICA: Si no hay perfil local, lo buscamos en Firestore
         if (!profile) {
-          const { doc, getDoc } = await import('firebase/firestore');
-          const { db } = await import('./firebaseConfig');
           const userDoc = await getDoc(doc(db, "users", user.uid));
           if (userDoc.exists() && userDoc.data().onboardingComplete) {
             const profileData = userDoc.data();

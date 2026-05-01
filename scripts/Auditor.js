@@ -5,8 +5,9 @@
  * los datos reales y no solo asumiendo por capturas de pantalla.
  */
 
-const PROJECT_ID = "coreadapt-d7f0d";
-const API_KEY = "AIzaSyCxt7rOulp5bbKFW8PkNhU2SU-5Tl3CPbo";
+const PROJECT_ID = process.env.VITE_FIREBASE_PROJECT_ID || "coreadapt-d7f0d";
+const API_KEY = process.env.VITE_FIREBASE_API_KEY;
+if (!API_KEY) { console.error("Falta VITE_FIREBASE_API_KEY en el entorno."); process.exit(1); }
 const URL = `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}/databases/(default)/documents/Conocimiento_Tecnico?key=${API_KEY}&pageSize=1000`;
 
 async function ejecutarAuditoria() {

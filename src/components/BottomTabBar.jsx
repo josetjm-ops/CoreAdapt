@@ -61,7 +61,7 @@ const BottomTabBar = ({ activeTab, setActiveTab }) => {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px',
-                color: active ? '#00FF41' : '#84967e',
+                color: active ? 'var(--primary)' : 'var(--on-surface-variant)',
                 background: 'none', border: 'none', cursor: 'pointer',
                 fontFamily: "'Inter', sans-serif",
                 padding: '0 4px',
@@ -69,7 +69,7 @@ const BottomTabBar = ({ activeTab, setActiveTab }) => {
                 minWidth: '48px',
               }}
             >
-              <span style={{ filter: active ? 'drop-shadow(0 0 6px #00FF41)' : 'none', transition: 'filter 0.2s' }}>
+              <span style={{ filter: active ? 'drop-shadow(0 0 6px var(--primary))' : 'none', transition: 'filter 0.2s' }}>
                 {NAV_ICONS[tab.id]}
               </span>
               <span style={{ fontSize: '0.55rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.04em', whiteSpace: 'nowrap' }}>
@@ -81,7 +81,7 @@ const BottomTabBar = ({ activeTab, setActiveTab }) => {
             {showFab && (
               <div style={{
                 width: '56px', height: '56px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(180deg, #ebffe2 0%, #00FF41 100%)',
+                background: 'linear-gradient(180deg, #ebffe2 0%, var(--primary) 100%)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 boxShadow: '0 0 24px rgba(0,255,65,0.45)',
                 cursor: 'pointer',
@@ -90,7 +90,7 @@ const BottomTabBar = ({ activeTab, setActiveTab }) => {
               onClick={() => setActiveTab('combustible')}
               title="Capturar Alimento"
               >
-                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="#003907" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="var(--on-primary)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                   <circle cx="12" cy="13" r="4"/>
                 </svg>
