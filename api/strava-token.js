@@ -22,6 +22,9 @@ export default async function handler(req, res) {
 
   try {
     // 1. Verificar identidad del usuario
+    if (!adminAuth || !adminDb) {
+      return res.status(503).json({ error: 'Firebase Admin SDK no configurado. Agrega FIREBASE_SERVICE_ACCOUNT_JSON en Vercel.' });
+    }
     const decodedToken = await adminAuth.verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
@@ -30,8 +33,8 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        client_id: process.env.VITE_STRAVA_CLIENT_ID,
-        client_secret: process.env.VITE_STRAVA_CLIENT_SECRET,
+        client_id: process.env.STRAVA_CLIENT_ID,
+        client_secret: process.env.STRAVA_CLIENT_SECRET,
         code,
         grant_type: 'authorization_code'
       })

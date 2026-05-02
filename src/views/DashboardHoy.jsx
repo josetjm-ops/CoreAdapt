@@ -117,6 +117,7 @@ const DashboardHoy = ({ profile = {} }) => {
   const { brainPlan, diaActual } = useMiPlan();
   const {
     todayCheckin,
+    last7Checkins,
     avgHRV7d,
     acwr,
     acwrStatus,
@@ -379,6 +380,7 @@ const DashboardHoy = ({ profile = {} }) => {
           userProfile={profile}
           checkinHoy={todayCheckin}
           sesionHoy={sesionHoy}
+          historialSemana={last7Checkins}
           initialMessage={motivation?.mensaje}
         />
       )}

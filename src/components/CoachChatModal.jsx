@@ -11,7 +11,8 @@ const TONO_COLOR = {
   tapering: 'var(--amber, #FFBF00)',
 };
 
-const CoachChatModal = ({ onClose, userProfile, checkinHoy, sesionHoy, initialMessage }) => {
+const CoachChatModal = ({ onClose, userProfile, checkinHoy, sesionHoy, historialSemana = [], initialMessage }) => {
+  const streakDias = historialSemana.filter(c => c.sesion_completada).length;
   const [messages, setMessages] = useState(
     initialMessage
       ? [{ role: 'coach', text: initialMessage }]
@@ -42,8 +43,8 @@ const CoachChatModal = ({ onClose, userProfile, checkinHoy, sesionHoy, initialMe
           userProfile,
           checkinHoy,
           sesionHoy,
-          historialSemana: [],
-          streakDias: 0,
+          historialSemana,
+          streakDias,
           chatHistory: newMessages.slice(-5),
           preguntaUsuario: text,
         }),
