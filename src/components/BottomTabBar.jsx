@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 const NAV_ICONS = {
   hoy: (
@@ -26,14 +25,19 @@ const NAV_ICONS = {
   ),
 };
 
-const BottomTabBar = ({ activeTab, setActiveTab }) => {
-  const { t } = useTranslation();
+const TAB_LABELS = {
+  hoy: 'Hoy',
+  miPlan: 'Plan',
+  combustible: 'Fuel',
+  cockpit: 'Config',
+};
 
+const BottomTabBar = ({ activeTab, setActiveTab }) => {
   const tabs = [
-    { id: 'hoy',         label: t('tabs.hoy') },
-    { id: 'miPlan',      label: t('tabs.miPlan') },
-    { id: 'combustible', label: t('tabs.combustible') },
-    { id: 'cockpit',     label: t('tabs.cockpit') },
+    { id: 'hoy',         label: TAB_LABELS.hoy },
+    { id: 'miPlan',      label: TAB_LABELS.miPlan },
+    { id: 'combustible', label: TAB_LABELS.combustible },
+    { id: 'cockpit',     label: TAB_LABELS.cockpit },
   ];
 
   return (
@@ -53,7 +57,6 @@ const BottomTabBar = ({ activeTab, setActiveTab }) => {
     }}>
       {tabs.map((tab, i) => {
         const active = activeTab === tab.id;
-        // Camera FAB sits between miPlan and combustible (index 1 and 2)
         const showFab = i === 1;
         return (
           <React.Fragment key={tab.id}>

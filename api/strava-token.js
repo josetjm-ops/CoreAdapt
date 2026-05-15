@@ -11,22 +11,20 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { code, idToken } = req.body;
+  const { code, uid } = req.body;
 
   if (!code) {
     return res.status(400).json({ error: 'Authorization code is required' });
   }
-  if (!idToken) {
-    return res.status(401).json({ error: 'Firebase ID token is required' });
+  if (!uid) {
+    return res.status(401).json({ error: 'UID is required' });
   }
 
   try {
     // 1. Verificar identidad del usuario
-    if (!adminAuth || !adminDb) {
+    if (!adminDb) {
       return res.status(503).json({ error: 'Firebase Admin SDK no configurado. Agrega FIREBASE_SERVICE_ACCOUNT_JSON en Vercel.' });
     }
-    const decodedToken = await adminAuth.verifyIdToken(idToken);
-    const uid = decodedToken.uid;
 
     // 2. Intercambiar código por tokens con Strava
     const response = await fetch('https://www.strava.com/api/v3/oauth/token', {

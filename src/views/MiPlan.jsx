@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { db, auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getPersonalUID } from '../services/PersonalUser';
 import DailyCheckinModal from '../components/DailyCheckinModal';
 import { Activity, Brain, TrendingUp, Calendar, ClipboardList, CheckCircle2, XCircle, AlertTriangle, ShieldCheck, Zap } from 'lucide-react';
 import { DISCIPLINE_ICONS } from '../constants/icons';
@@ -323,10 +324,11 @@ const MiPlan = ({ profile = {} }) => {
       const finalPlan = await res.json();
       setBrainPlan(finalPlan);
 
-      if (auth.currentUser) {
+      const uid = getPersonalUID();
+      if (uid) {
         await addDoc(collection(db, 'MiPlan_Ajustes'), {
-          userId: auth.currentUser.uid,
-          email: auth.currentUser.email,
+          userId: uid,
+          email: 'personal@coreadapt.local',
           timestamp_generacion: serverTimestamp(),
           plan_generado: finalPlan,
         });

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CheckCircle2, XCircle, Zap, Activity, Settings2, ChevronRight, Heart } from 'lucide-react';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
+import { getPersonalUID } from '../services/PersonalUser';
 
 const DailyCheckinModal = ({ onClose, onSubmit }) => {
   const [completado, setCompletado] = useState(true);
@@ -14,10 +15,10 @@ const DailyCheckinModal = ({ onClose, onSubmit }) => {
   const handleSubmit = async () => {
     setSaving(true);
     try {
-      const user = auth.currentUser;
+      const uid = getPersonalUID();
       const fecha = new Date().toISOString().split('T')[0];
       const checkinData = {
-        userId: user?.uid || 'anon',
+        userId: uid,
         fecha,
         timestamp: serverTimestamp(),
         body_battery: parseInt(battery),
@@ -27,9 +28,7 @@ const DailyCheckinModal = ({ onClose, onSubmit }) => {
         notas: notas.trim()
       };
 
-      if (user) {
-        await setDoc(doc(db, 'Checkins', `${user.uid}_${fecha}`), checkinData);
-      }
+      await setDoc(doc(db, 'Checkins', `${uid}_${fecha}`), checkinData);
 
       onSubmit({
         rutina_completada: completado,

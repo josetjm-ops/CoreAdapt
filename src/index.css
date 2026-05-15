@@ -36,6 +36,10 @@
   padding: 0;
 }
 
+html {
+  font-size: 32px; /* 2× base (default 16px) — duplica todo lo que use rem */
+}
+
 body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-color);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { db, auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { getPersonalUID } from '../services/PersonalUser';
 import { X, CheckCircle } from 'lucide-react';
 import { DISCIPLINE_ICONS } from '../constants/icons';
 
@@ -19,13 +20,12 @@ const LogEntrenamientoModal = ({ onClose, sesionPlanHoy = null }) => {
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async () => {
-    const user = auth.currentUser;
-    if (!user) return;
+    const uid = getPersonalUID();
     setSaving(true);
 
     try {
       await addDoc(collection(db, 'Actividades'), {
-        userId: user.uid,
+        userId: uid,
         fecha: TODAY(),
         timestamp: serverTimestamp(),
         tipo,

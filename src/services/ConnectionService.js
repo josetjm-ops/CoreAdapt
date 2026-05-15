@@ -52,14 +52,14 @@ class ConnectionService {
     return "#";
   }
 
-  async exchangeStravaCode(code, idToken) {
-    if (!idToken) throw new Error('Firebase ID token required to connect Strava');
+  async exchangeStravaCode(code, uid) {
+    if (!uid) throw new Error('Personal UID required to connect Strava');
 
     try {
       const response = await fetch('/api/strava-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, idToken })
+        body: JSON.stringify({ code, uid })
       });
 
       if (!response.ok) throw new Error('Failed to exchange Strava code');
@@ -84,9 +84,9 @@ class ConnectionService {
     }
   }
 
-  async connect(serviceId, code = null, idToken = null) {
+  async connect(serviceId, code = null, uid = null) {
     if (serviceId === 'strava' && code) {
-      return await this.exchangeStravaCode(code, idToken);
+      return await this.exchangeStravaCode(code, uid);
     }
 
     // Conexión genérica simulada para otros servicios

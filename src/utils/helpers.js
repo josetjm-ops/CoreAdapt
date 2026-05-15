@@ -9,13 +9,6 @@ export const getMilestoneProgress = (daysLeft, totalDays) => {
   return Math.min(100, Math.round(((totalDays - daysLeft) / totalDays) * 100));
 };
 
-export const logoutAndRedirect = (auth, signOut) => {
-  signOut(auth).then(() => {
-    localStorage.removeItem('coreAdaptProfile');
-    window.location.href = '/';
-  });
-};
-
 export const sortByTimestamp = (docs) =>
   [...docs].sort((a, b) => {
     const tA = a.timestamp_generacion?.toMillis ? a.timestamp_generacion.toMillis() : 0;

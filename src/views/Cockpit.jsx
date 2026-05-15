@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { auth } from '../firebaseConfig';
 import { connectionService } from '../services/ConnectionService';
 import { BrainService } from '../services/BrainService';
 import { normalizeGarminData } from '../services/GarminDataNormalizer';
 import { seedProtocols } from '../services/ProtocolSeeder';
 import { COLORS } from '../constants/theme';
 import { DISCIPLINE_EMOJI } from '../constants/icons';
+import { resetProfile, saveProfile } from '../services/PersonalUser';
 import useCheckins from '../hooks/useCheckins';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -25,15 +24,6 @@ const GEAR_ITEMS = [
   { id: 'gym',    icon: '🏋️', name: 'Performance Center', type: 'Gimnasio',          stat: '3x / sem', statLabel: 'Frecuencia' },
   { id: 'pool',   icon: '🏊', name: 'Olympic Pool Pro',    type: 'Natación',          stat: '2x / sem', statLabel: 'Frecuencia' },
 ];
-
-const LANGUAGES = [
-  { code: 'es', name: 'Español',    flag: '🇪🇸' },
-  { code: 'en', name: 'English',    flag: '🇬🇧' },
-  { code: 'pt', name: 'Português',  flag: '🇧🇷' },
-  { code: 'fr', name: 'Français',   flag: '🇫🇷' },
-  { code: 'it', name: 'Italiano',   flag: '🇮🇹' },
-];
-
 
 const AVATAR_LABELS = { executive: '💼 Ejecutivo', university: '🎓 Universitario' };
 
@@ -68,10 +58,10 @@ const Toggle = ({ label, desc, value, onChange }) => (
   </div>
 );
 
-const ApiCard = ({ apiMeta, status, onAction, t }) => {
+const ApiCard = ({ apiMeta, status, onAction }) => {
   const isConnected = status?.connected;
   const statusColor = isConnected ? COLORS.primary : COLORS.textMuted;
-  const statusLabel = isConnected ? t('cockpit.connected') : t('cockpit.disconnected');
+  const statusLabel = isConnected ? 'Conectado' : 'Desconectado';
 
   return (
     <div style={{ background: COLORS.surface, borderRadius: '1.25rem', padding: '1rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
@@ -88,7 +78,7 @@ const ApiCard = ({ apiMeta, status, onAction, t }) => {
         <p style={{ color: COLORS.textMuted, fontSize: '0.75rem', marginTop: '2px' }}>{apiMeta.detail}</p>
         {status?.lastSync && (
           <p style={{ color: COLORS.border, fontSize: '0.65rem', marginTop: '2px', textTransform: 'uppercase' }}>
-            {t('cockpit.sync_msg')} {new Date(status.lastSync).toLocaleTimeString()}
+            Última sincronización: {new Date(status.lastSync).toLocaleTimeString()}
           </p>
         )}
       </div>
@@ -101,7 +91,7 @@ const ApiCard = ({ apiMeta, status, onAction, t }) => {
           fontWeight: '700', fontSize: '0.7rem', cursor: 'pointer', minWidth: '80px', fontFamily: 'inherit',
         }}
       >
-        {isConnected ? t('cockpit.btn_disconnect') : t('cockpit.btn_connect')}
+        {isConnected ? 'Desconectar' : 'Conectar'}
       </button>
     </div>
   );
@@ -125,8 +115,7 @@ const GearCard = ({ gear }) => (
 
 // ─── Main Cockpit Component ───────────────────────────────────────────────────
 
-const Cockpit = ({ profile = {} }) => {
-  const { t, i18n } = useTranslation();
+const Cockpit = ({ profile = {}, setProfile }) => {
   const { todayCheckin, avgHRV7d, avgBattery7d } = useCheckins();
   const [connections, setConnections] = useState(connectionService.getAllStatus());
 
@@ -171,8 +160,8 @@ const Cockpit = ({ profile = {} }) => {
   const toggleSetting = (key) => (val) => setSettings((s) => ({ ...s, [key]: val }));
 
   const handleReset = () => {
-    if (window.confirm('¿Reiniciar el Onboarding? Se perderá la configuración actual.')) {
-      localStorage.removeItem('coreAdaptProfile');
+    if (window.confirm('¿Reiniciar la configuración? Se perderá la configuración actual.')) {
+      resetProfile();
       window.location.reload();
     }
   };
@@ -209,10 +198,10 @@ const Cockpit = ({ profile = {} }) => {
 
       <header style={{ marginBottom: '2rem' }}>
         <p style={{ color: COLORS.textSoft, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-          {t('cockpit.subtitle')}
+          Panel de Control
         </p>
         <h1 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.03em', marginTop: '0.1rem' }}>
-          {t('cockpit.title')}
+          Configuración
         </h1>
       </header>
 
@@ -227,7 +216,7 @@ const Cockpit = ({ profile = {} }) => {
             {profile.avatar === 'executive' ? '💼' : '🎓'}
           </div>
           <div style={{ flex: 1 }}>
-            <p style={{ fontWeight: '800', fontSize: '1.1rem' }}>{AVATAR_LABELS[profile.avatar] || '🏃 Atleta CoreAdapt'}</p>
+            <p style={{ fontWeight: '800', fontSize: '1.1rem' }}>{profile.firstName || 'Atleta CoreAdapt'}</p>
             <p style={{ color: COLORS.textSoft, fontSize: '0.8rem', marginTop: '2px' }}>{profile.milestone || 'Hito no configurado'}</p>
             {profile.milestoneDate && (
               <p style={{ color: COLORS.secondary, fontSize: '0.72rem', fontWeight: '700', marginTop: '2px' }}>
@@ -252,7 +241,7 @@ const Cockpit = ({ profile = {} }) => {
 
       {/* Biometrics */}
       <section style={{ marginBottom: '1.5rem' }}>
-        <SectionLabel>{t('cockpit.biometrics')} · Garmin Live</SectionLabel>
+        <SectionLabel>Biométricos · Garmin Live</SectionLabel>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
           {biometrics.map((b) => (
             <div key={b.label} style={{ background: COLORS.surface, borderRadius: '1.25rem', padding: '1rem' }}>
@@ -266,10 +255,10 @@ const Cockpit = ({ profile = {} }) => {
 
       {/* API Connection Center */}
       <section style={{ marginBottom: '1.5rem' }}>
-        <SectionLabel>{t('cockpit.syncCenter')}</SectionLabel>
+        <SectionLabel>Centro de Sincronización</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {APIS_METADATA.map((apiMeta) => (
-            <ApiCard key={apiMeta.id} apiMeta={apiMeta} status={connections[apiMeta.id]} onAction={handleApiAction} t={t} />
+            <ApiCard key={apiMeta.id} apiMeta={apiMeta} status={connections[apiMeta.id]} onAction={handleApiAction} />
           ))}
         </div>
       </section>
@@ -301,7 +290,7 @@ const Cockpit = ({ profile = {} }) => {
 
       {/* Equipment Arsenal */}
       <section style={{ marginBottom: '1.5rem' }}>
-        <SectionLabel>{t('cockpit.gear')}</SectionLabel>
+        <SectionLabel>Arsenal de Equipo</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {GEAR_ITEMS.filter((g) =>
             (g.id === 'tarmac' && resources.includes('bike_road')) ||
@@ -313,38 +302,12 @@ const Cockpit = ({ profile = {} }) => {
         </div>
       </section>
 
-      {/* Language Switcher */}
-      <section style={{ marginBottom: '1.5rem' }}>
-        <SectionLabel>{t('cockpit.language')}</SectionLabel>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
-          {LANGUAGES.map((lang) => {
-            const active = i18n.language === lang.code;
-            return (
-              <button
-                key={lang.code}
-                onClick={() => i18n.changeLanguage(lang.code)}
-                style={{
-                  background: active ? COLORS.primary : COLORS.surface, color: active ? COLORS.primaryDark : COLORS.text,
-                  border: active ? 'none' : `1px solid #2a2a2a`, borderRadius: '1rem', padding: '0.75rem',
-                  display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer',
-                  fontFamily: "'Inter', sans-serif", fontWeight: '700', fontSize: '0.85rem', transition: 'all 0.2s',
-                  boxShadow: active ? '0 0 16px rgba(0,255,65,0.3)' : 'none',
-                }}
-              >
-                <span style={{ fontSize: '1.1rem' }}>{lang.flag}</span>
-                {lang.name}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
       {/* Settings Toggles */}
       <section style={{ background: COLORS.surface, borderRadius: '1.5rem', padding: '0 1.25rem', marginBottom: '1.5rem' }}>
         <div style={{ paddingTop: '0.5rem' }}>
-          <Toggle label={t('cockpit.privacy')}      desc={t('cockpit.privacyDesc')}      value={settings.privacy}       onChange={toggleSetting('privacy')} />
-          <Toggle label={t('cockpit.automation')}   desc={t('cockpit.automationDesc')}   value={settings.automation}    onChange={toggleSetting('automation')} />
-          <Toggle label={t('cockpit.notifications')} desc={t('cockpit.notificationsDesc')} value={settings.notifications} onChange={toggleSetting('notifications')} />
+          <Toggle label="Privacidad"       desc="Encriptar datos biométricos localmente"     value={settings.privacy}       onChange={toggleSetting('privacy')} />
+          <Toggle label="Automatización"   desc="Importar datos de Strava automáticamente"   value={settings.automation}    onChange={toggleSetting('automation')} />
+          <Toggle label="Notificaciones"   desc="Alertas de sobreentrenamiento y check-ins"  value={settings.notifications} onChange={toggleSetting('notifications')} />
         </div>
       </section>
 
@@ -382,23 +345,13 @@ const Cockpit = ({ profile = {} }) => {
       {/* Controls */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '1rem' }}>
         <button onClick={handleReset} style={{ width: '100%', padding: '0.9rem', borderRadius: '9999px', background: 'transparent', border: `1px solid ${COLORS.border}`, color: COLORS.textMuted, fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}>
-          ↺ {t('cockpit.reset')}
-        </button>
-        <button
-          onClick={async () => {
-            await auth.signOut();
-            localStorage.clear();
-            window.location.reload();
-          }}
-          style={{ width: '100%', padding: '0.9rem', borderRadius: '9999px', background: `rgba(255, 75, 75, 0.1)`, border: `1px solid ${COLORS.danger}`, color: COLORS.danger, fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer', fontFamily: "'Inter', sans-serif" }}
-        >
-          LOGOUT (CERRAR SESIÓN)
+          ↺ Reiniciar Configuración
         </button>
       </div>
 
       {/* Version Footer */}
       <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-        <p style={{ color: COLORS.border, fontSize: '0.7rem', marginBottom: '1rem' }}>CoreAdapt Engine v2.6.7 (Stable-PROD)</p>
+        <p style={{ color: COLORS.border, fontSize: '0.7rem', marginBottom: '1rem' }}>CoreAdapt Engine v3.0.0 (Personal)</p>
         <button
           onClick={async () => {
             if (window.confirm('¿Forzar actualización? Esto limpiará la caché local y recargará la aplicación.')) {

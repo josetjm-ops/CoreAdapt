@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { auth } from '../firebaseConfig';
-import { signOut } from 'firebase/auth';
-import { Zap, Activity, User, Brain, Heart, Plus, ClipboardList, MessageCircle, AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
+import { Zap, Activity, Brain, Heart, Plus, ClipboardList, MessageCircle, AlertTriangle, TrendingDown, TrendingUp } from 'lucide-react';
 import useMiPlan from '../hooks/useMiPlan';
 import useCheckins from '../hooks/useCheckins';
 import useMotivation from '../hooks/useMotivation';
@@ -132,18 +130,11 @@ const DashboardHoy = ({ profile = {} }) => {
   const [showLogModal, setShowLogModal] = useState(false);
   const [showCoachChat, setShowCoachChat] = useState(false);
 
-  const todayStr = new Date().toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  const todayStr = new Date().toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' });
   const bodyBattery = todayCheckin?.body_battery ?? null;
   const hrvHoy = todayCheckin?.hrv_manual ?? null;
 
-  const handleLogout = () => {
-    if (window.confirm('¿Deseas cerrar sesión?')) {
-      signOut(auth).then(() => {
-        localStorage.removeItem('coreAdaptProfile');
-        window.location.href = '/';
-      });
-    }
-  };
+  const initial = (profile.firstName || 'A').charAt(0).toUpperCase();
 
   return (
     <div style={{ padding: '3rem 1.5rem 10rem', color: 'var(--on-surface)' }}>
@@ -154,12 +145,14 @@ const DashboardHoy = ({ profile = {} }) => {
           <h1 className="headline-md" style={{ fontSize: '2.2rem', lineHeight: 1 }}>
             Hola, {profile.firstName || 'Atleta'}
           </h1>
-          <div onClick={handleLogout} style={{
+          <div style={{
             width: '48px', height: '48px', borderRadius: 'var(--radius-full)',
-            background: 'var(--surface-high)', display: 'flex', alignItems: 'center',
-            justifyContent: 'center', cursor: 'pointer',
+            background: 'linear-gradient(135deg, var(--surface-high) 0%, var(--surface-lowest) 100%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '1.2rem', fontWeight: '800', color: 'var(--primary)',
+            border: '1px solid rgba(0,255,65,0.2)',
           }}>
-            <User size={20} strokeWidth={1.5} color="var(--on-surface-variant)" />
+            {initial}
           </div>
         </div>
       </header>

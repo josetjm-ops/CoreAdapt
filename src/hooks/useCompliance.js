@@ -1,18 +1,15 @@
 /**
  * useCompliance — Algoritmo de Incumplimiento y Reprogramación Dinámica
  *
+ * Usa PersonalUser UID en vez de Firebase Auth.
  * Lee el plan más reciente de MiPlan_Ajustes y los check-ins correspondientes
- * para calcular la tasa de cumplimiento y determinar la acción de reprogramación:
- *
- *   'continue'              — Omisión ocasional (1-2 días). Seguir adelante.
- *   'redistribute_50_75'    — Omisión significativa (3-7 días). Redistribuir carga.
- *   'conservative_restart'  — Interrupción prolongada (>10 días). Reinicio conservador.
+ * para calcular la tasa de cumplimiento.
  */
 
 import { useState, useEffect } from 'react';
 import { collection, query, where, orderBy, limit, getDocs, onSnapshot } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
+import { getPersonalUID } from '../services/PersonalUser';
 
 const useCompliance = () => {
   const [compliance, setCompliance] = useState(null);
@@ -20,22 +17,15 @@ const useCompliance = () => {
 
   useEffect(() => {
     let unsubCheckins = null;
+    const uid = getPersonalUID();
 
-    const unsubAuth = onAuthStateChanged(auth, async (user) => {
-      if (unsubCheckins) { unsubCheckins(); unsubCheckins = null; }
-
-      if (!user) {
-        setCompliance(null);
-        setLoading(false);
-        return;
-      }
-
+    const init = async () => {
       try {
         // Cargar plan más reciente
         const planSnap = await getDocs(
           query(
             collection(db, 'MiPlan_Ajustes'),
-            where('userId', '==', user.uid),
+            where('userId', '==', uid),
             orderBy('timestamp_generacion', 'desc'),
             limit(1)
           )
@@ -75,7 +65,7 @@ const useCompliance = () => {
         unsubCheckins = onSnapshot(
           query(
             collection(db, 'Checkins'),
-            where('userId', '==', user.uid),
+            where('userId', '==', uid),
             where('fecha', '>=', since),
             where('fecha', '<=', until),
             orderBy('fecha', 'desc')
@@ -112,7 +102,7 @@ const useCompliance = () => {
               }
             }
 
-            // Algoritmo de incumplimiento (spec §6)
+            // Algoritmo de incumplimiento
             let action;
             if (diasPerdidosConsecutivos <= 2) {
               action = 'continue';
@@ -122,7 +112,6 @@ const useCompliance = () => {
               action = 'conservative_restart';
             }
 
-            // Determinar descripción del estado
             const actionLabels = {
               continue: {
                 titulo: 'En Carrera',
@@ -131,12 +120,12 @@ const useCompliance = () => {
               },
               redistribute_50_75: {
                 titulo: 'Redistribución Necesaria',
-                descripcion: `${diasPerdidosConsecutivos} días perdidos. El Brain redistribuirá el 50-75% del volumen en las próximas semanas.`,
+                descripcion: `${diasPerdidosConsecutivos} días perdidos. El Brain redistribuirá el 50-75% del volumen.`,
                 color: '#FF7043',
               },
               conservative_restart: {
                 titulo: 'Reinicio Conservador',
-                descripcion: 'Interrupción prolongada detectada. El Brain generará un plan con el 25-50% de la carga base para proteger el sistema neuromuscular.',
+                descripcion: 'Interrupción prolongada detectada. El Brain generará un plan con el 25-50% de la carga base.',
                 color: '#F44336',
               },
             };
@@ -161,10 +150,11 @@ const useCompliance = () => {
         console.error('useCompliance error:', err);
         setLoading(false);
       }
-    });
+    };
+
+    init();
 
     return () => {
-      unsubAuth();
       if (unsubCheckins) unsubCheckins();
     };
   }, []);

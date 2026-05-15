@@ -11,18 +11,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { idToken } = req.body;
-  if (!idToken) {
-    return res.status(401).json({ error: 'Firebase ID token is required' });
+  const { uid } = req.body;
+  if (!uid) {
+    return res.status(401).json({ error: 'UID is required' });
   }
 
   try {
     // 1. Verificar identidad del usuario
-    if (!adminAuth || !adminDb) {
+    if (!adminDb) {
       return res.status(503).json({ error: 'Firebase Admin SDK no configurado. Agrega FIREBASE_SERVICE_ACCOUNT_JSON en Vercel.' });
     }
-    const decodedToken = await adminAuth.verifyIdToken(idToken);
-    const uid = decodedToken.uid;
 
     // 2. Leer refreshToken desde Firestore
     const snap = await adminDb.doc(`users/${uid}/integrations/strava`).get();

@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
 import { COLORS } from '../constants/theme';
 import useNutricion from '../hooks/useNutricion';
 import AddFoodModal from '../components/AddFoodModal';
@@ -277,7 +276,6 @@ const CameraModal = ({ onClose, onAdd }) => {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 const Combustible = ({ profile = {} }) => {
-  const { t } = useTranslation();
   const { foodLog, macrosConsumed, macrosTarget, addFoodEntry } = useNutricion(profile);
   const [showCamera, setShowCamera] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -302,7 +300,7 @@ const Combustible = ({ profile = {} }) => {
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
           <p style={{ color: COLORS.textSoft, fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Nutrición · IA</p>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.03em', marginTop: '0.1rem' }}>{t('tabs.combustible')}</h1>
+          <h1 style={{ fontSize: '1.75rem', fontWeight: '800', letterSpacing: '-0.03em', marginTop: '0.1rem' }}>Combustible</h1>
         </div>
         <button onClick={() => setShowCamera(true)} style={{ width: '52px', height: '52px', borderRadius: '50%', border: 'none', background: `linear-gradient(180deg, #ebffe2 0%, ${COLORS.primary} 100%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 0 20px rgba(0,255,65,0.35)' }} title="Capturar Alimento con Vision AI">
           <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke={COLORS.primaryDark} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

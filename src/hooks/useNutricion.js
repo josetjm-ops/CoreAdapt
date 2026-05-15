@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { db, auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
 import { collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { getPersonalUID } from '../services/PersonalUser';
 
 const TODAY = () => new Date().toISOString().split('T')[0];
 
@@ -34,38 +34,29 @@ const useNutricion = (profile = {}, actividadIntensidad = 'moderada') => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let unsub = () => {};
+    const uid = getPersonalUID();
 
-    const authUnsub = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        setFoodLog([]);
-        setLoading(false);
-        return;
-      }
+    const q = query(
+      collection(db, 'RegistrosComida'),
+      where('userId', '==', uid),
+      where('fecha', '==', TODAY()),
+      orderBy('hora', 'asc')
+    );
 
-      const q = query(
-        collection(db, 'RegistrosComida'),
-        where('userId', '==', user.uid),
-        where('fecha', '==', TODAY()),
-        orderBy('hora', 'asc')
-      );
+    const unsub = onSnapshot(q, (snap) => {
+      setFoodLog(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+      setLoading(false);
+    }, () => setLoading(false));
 
-      unsub = onSnapshot(q, (snap) => {
-        setFoodLog(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        setLoading(false);
-      }, () => setLoading(false));
-    });
-
-    return () => { authUnsub(); unsub(); };
+    return () => unsub();
   }, []);
 
   const addFoodEntry = useCallback(async (entry) => {
-    const user = auth.currentUser;
-    if (!user) throw new Error('No autenticado');
+    const uid = getPersonalUID();
 
     await addDoc(collection(db, 'RegistrosComida'), {
       ...entry,
-      userId: user.uid,
+      userId: uid,
       fecha: TODAY(),
       timestamp: serverTimestamp(),
     });

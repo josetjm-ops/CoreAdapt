@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { getPersonalUID } from '../services/PersonalUser';
 import { connectionService } from '../services/ConnectionService';
 
 const Callback = () => {
@@ -22,11 +22,8 @@ const Callback = () => {
 
     const handleCallback = async () => {
       try {
-        // Obtener Firebase ID token para que el serverless verifique la identidad
-        const user = auth.currentUser;
-        const idToken = user ? await user.getIdToken() : null;
-
-        await connectionService.connect(targetService, code, idToken);
+        const uid = getPersonalUID();
+        await connectionService.connect(targetService, code, uid);
         setStatus('success');
         setTimeout(() => navigate('/'), 2000);
       } catch (err) {
@@ -64,12 +61,12 @@ const Callback = () => {
       <h2 style={{ fontSize: '1.5rem', fontWeight: '800' }}>
         {status === 'processing' && 'Sincronizando con el Cerebro...'}
         {status === 'success' && '¡Conexión Exitosa!'}
-        {status === 'error' && 'Error en la Autenticación'}
+        {status === 'error' && 'Error en la conexión'}
       </h2>
 
       <p style={{ color: '#b9ccb2', marginTop: '1rem', fontSize: '0.9rem' }}>
         {status === 'processing' && 'Estamos vinculando tus datos de entrenamiento de forma segura.'}
-        {status === 'success' && 'Redirigiendo a tu Cockpit de alto desempeño...'}
+        {status === 'success' && 'Redirigiendo a tu panel de control...'}
         {status === 'error' && 'No recibimos el permiso necesario. Inténtalo de nuevo.'}
       </p>
 
