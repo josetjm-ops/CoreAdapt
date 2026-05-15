@@ -37,7 +37,7 @@
 }
 
 html {
-  font-size: 32px; /* 2× base (default 16px) — duplica todo lo que use rem */
+  font-size: 22px; /* ~70% del tamaño de 32px, y un 37% mayor que el 16px original */
 }
 
 body {
